@@ -105,7 +105,7 @@ namespace CopyPaster
                     ClipboardContent = args.ClipboardContent,
                     Keybind = args.Keybind
                 };
-
+                
                 item.Delete += MultiClipboardItem_Delete;
                 item.Copy += MultiClipboardItem_Copy;
                 item.Edit += MultiClipboardItem_Edit;
