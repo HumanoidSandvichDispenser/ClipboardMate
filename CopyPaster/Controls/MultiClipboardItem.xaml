@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="CopyPaster.Controls.MultiClipboardItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CopyPaster.Controls"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:Icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             Height="76" Width="356">
+    <Grid>
+        <!--CONTROL LAYOUT PROPERTIES
+            BINDING
+            APPEARANCE PROPERTIES AND EVENTS-->
+
+        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="222" Margin="10,10,0,0" TextWrapping="Wrap" 
+                 Text="{Binding ClipboardContent, Mode=TwoWay}" IsEnabled="{Binding ElementName=EditButton, Path=IsChecked}"
+                 Controls:TextBoxHelper.Watermark="Content" TextChanged="TextBox_TextChanged">
+        </TextBox>
+
+        <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="222" Margin="10,41,0,0" TextWrapping="Wrap" 
+                 Text="{Binding Keybind, Mode=TwoWay}" IsEnabled="{Binding ElementName=EditButton, Path=IsChecked}"
+                 Controls:TextBoxHelper.Watermark="Keybind" TextChanged="TextBox_TextChanged"></TextBox>
+
+        <ToggleButton x:Name="EditButton" HorizontalAlignment="Right" VerticalAlignment="Center" Width="41" Margin="12,12,61,12" Height="41"
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleToggleButtonStyle}"
+                Click="EditButton_Click">
+            <Icons:PackIconMaterial Kind="Pencil" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </ToggleButton>
+
+        <!--Button x:Name="SaveButton" HorizontalAlignment="Right" VerticalAlignment="Center" Width="41" Margin="12,12,61,12" Height="41"
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                Click="SaveButton_Click">
+            <Icons:PackIconMaterial Kind="ContentSave" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Button-->
+
+        <Button x:Name="DeleteButton" HorizontalAlignment="Right" VerticalAlignment="Center" Width="41" Margin="12,12,10,12" Height="41"
+                Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                Click="DeleteButton_Click">
+            <Icons:PackIconMaterial Kind="Delete" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Button>
+
+        <Button x:Name="CopyButton" HorizontalAlignment="Left" Width="244"
+                Style="{DynamicResource ResourceKey=Accent}"
+                Opacity="0"  MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" Click="CopyButton_Click">
+            <Icons:PackIconMaterial Kind="ContentCopy" VerticalAlignment="Center" HorizontalAlignment="Center" Height="32" Width="32"/>
+        </Button>
+
+    </Grid>
+    <UserControl.Resources>
+        <Style x:Key="Accent" TargetType="Button">
+            <Setter Property="Background" Value="#EA119EDA"/>
+            <Setter Property="BorderBrush" Value="#00000000"/>
+            <Setter Property="Foreground" Value="White"/>
+            
+        </Style>
+    </UserControl.Resources>
+</UserControl>

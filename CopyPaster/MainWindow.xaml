@@ -1,0 +1,78 @@
+﻿<mah:MetroWindow
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" x:Class="CopyPaster.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CopyPaster"
+        xmlns:Controls="clr-namespace:CopyPaster.Controls"
+        xmlns:properties="clr-namespace:CopyPaster.Properties"
+    xmlns:Icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    mc:Ignorable="d"
+        Title="Clipboard" Height="450" Width="800" Closing="MetroWindow_Closing">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Multi Clipboard">
+                <Grid>
+                    <Button Height="37" Width="37" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"
+                            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                            ToolTip="Add new clip" Click="MultiClipboardList_New">
+                        <Icons:PackIconMaterial Kind="Plus" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF9D9D9D"/>
+                    </Button>
+                    <!--Button Height="37" Width="37" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="52,10,0,0"
+                            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                            Click="MultiClipboardList_Save">
+                        <Icons:PackIconMaterial Kind="ContentSave" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF9D9D9D"/>
+                    </Button-->
+                    <Button Height="37" Width="37" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="52,10,0,0"
+                            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                            ToolTip="Reload hotkeys" Click="MultiClipboardList_Reload">
+                        <Icons:PackIconMaterial Kind="Reload" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF9D9D9D"/>
+                    </Button>
+                    <ScrollViewer Margin="0,57,355,0">
+                        <StackPanel x:Name="MultiClipboardList" Loaded="MultiClipboardList_Loaded">
+                        </StackPanel>
+                    </ScrollViewer>
+                    
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="Cycle Clipboard">
+                <Grid>
+                    <Button Height="37" Width="37" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"
+                            Style="{DynamicResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
+                            ToolTip="Add new clip" Click="CycleClipboardList_New">
+                        <Icons:PackIconMaterial Kind="Plus" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FF9D9D9D"/>
+                    </Button>
+                    <StackPanel x:Name="CycleClipboardList" VerticalAlignment="Top" Margin="0,57">
+                        
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Cycle Clipboard">
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid>
+                    <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" 
+                        Style="{DynamicResource ResourceKey=SettingsHeader}">KEYBIND SETTINGS</Label>
+                    <CheckBox Content="Paste with Keybind" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,49,0,0"
+                        IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=UseSendKeys, Mode=TwoWay}"/>
+                    <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,74,0,0" 
+                        Style="{DynamicResource ResourceKey=SettingsHeader}" Content="SCRIPTS"/>
+                    <CheckBox Content="Enable Scripts" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,113,0,0"
+                        IsChecked="{Binding UseSendKeys, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"/>
+                    <TextBox Height="23" Width="120" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,136,0,0"
+                        Text="{Binding ScriptsPath, Mode=TwoWay, Source={x:Static properties:Settings.Default}}"
+                        TextWrapping="NoWrap"/>
+                </Grid>
+            </TabItem>
+            <StackPanel Height="100" Width="100"/>
+        </TabControl>
+    </Grid>
+    <mah:MetroWindow.Resources>
+        <Style x:Key="SettingsHeader" TargetType="Label">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="500"/>
+        </Style>
+    </mah:MetroWindow.Resources>
+</mah:MetroWindow>
