@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace CopyPaster.Controls
 {
@@ -42,6 +43,9 @@ namespace CopyPaster.Controls
             if (EditButton.IsChecked != null && (bool)EditButton.IsChecked)
             {
                 EditMode = true;
+                //Clipboard.SetImage(System.Drawing.Image.FromFile(""));
+                //Process
+                
             }
             else
             {

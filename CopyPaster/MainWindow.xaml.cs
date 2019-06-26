@@ -34,15 +34,16 @@ namespace CopyPaster
         public MainWindow()
         {
             InitializeComponent();
+
+            if (clipboardSettings.ClipboardItems == null)
+            {
+                clipboardSettings.ClipboardItems = new List<ClipboardItemArgs>();
+                clipboardSettings.Save();
+            }
         }
 
         private void MultiClipboardList_Loaded(object sender, RoutedEventArgs e)
         {
-            if (clipboardSettings.ClipboardItems != null)
-            {
-                clipboardItems = clipboardSettings.ClipboardItems;
-            }
-
             foreach (HotKey hk in keybinds.Keys)
             {
                 hk.Unregister();
@@ -51,7 +52,7 @@ namespace CopyPaster
 
             MultiClipboardList.Children.Clear();
             keybinds.Clear();
-            foreach (ClipboardItemArgs args in clipboardItems)
+            foreach (ClipboardItemArgs args in clipboardSettings.ClipboardItems)
             {
                 MultiClipboardItem item = new MultiClipboardItem
                 {
@@ -63,7 +64,7 @@ namespace CopyPaster
                 item.Copy += MultiClipboardItem_Copy;
                 item.Edit += MultiClipboardItem_Edit;
                 MultiClipboardList.Children.Add(item);
-                if (item.Keybind != "") keybinds.Add(BindKeys(item.Keybind), item.ClipboardContent);
+                if (!String.IsNullOrWhiteSpace(item.Keybind)) keybinds.Add(BindKeys(item.Keybind), item.ClipboardContent);
             }
 
             new HotKey(Key.M, KeyModifier.Ctrl, Keybind_CycleClipboard);
@@ -116,12 +117,12 @@ namespace CopyPaster
 
         private void Save()
         {
-            clipboardItems.Clear();
+            clipboardSettings.ClipboardItems.Clear();
             foreach (UIElement element in MultiClipboardList.Children)
             {
                 if (element is MultiClipboardItem item)
                 {
-                    clipboardItems.Add(new ClipboardItemArgs
+                    clipboardSettings.ClipboardItems.Add(new ClipboardItemArgs
                     {
                         ClipboardContent = item.ClipboardContent,
                         Keybind = item.Keybind,
@@ -129,7 +130,6 @@ namespace CopyPaster
                 }
             }
 
-            clipboardSettings.ClipboardItems = clipboardItems;
             clipboardSettings.Save();
         }
 
@@ -171,12 +171,7 @@ namespace CopyPaster
         {
             if (keybinds.ContainsKey(obj))
             {
-                Clipboard.SetText(keybinds[obj]);
-                if (Properties.Settings.Default.UseSendKeys)
-                {
-                    //System.Windows.Forms.SendKeys.SendWait("^v");
-                    //MessageBox.Show(Properties.Settings.Default.UseSendKeys.ToString());
-                }
+                SetClipboardContent(keybinds[obj]);
             }
             else
             {
@@ -197,7 +192,7 @@ namespace CopyPaster
                 CycleClipboardItem item = CycleClipboardList.Children[currentIndex] as CycleClipboardItem;
                 try
                 {
-                    Clipboard.SetText(item.ClipboardContent);
+                    SetClipboardContent(item.ClipboardContent);
                 }
                 catch (ArgumentNullException)
                 {
@@ -213,6 +208,27 @@ namespace CopyPaster
             }
         }
 
+        private void SetClipboardContent(string content)
+        {
+            string[] contentParams = content.Split(',');
+            if (contentParams[0] == ("loadScript") && Properties.Settings.Default.UseScripts)
+            {
+                List<string> scriptArgs = new List<string>();
+                
+                for (int i = 2; i < contentParams.Length; i++)
+                {
+                    scriptArgs.Add(contentParams[i]);
+                }
+                
+                new ScriptLoader().LoadScript(contentParams[1], scriptArgs.ToArray());
+            }
+            else
+            {
+                Clipboard.SetText(content);
+            }
+            
+        }
+
         private void MultiClipboardList_New(object sender, RoutedEventArgs e)
         {
             MultiClipboardItem item = new MultiClipboardItem();
@@ -220,7 +236,7 @@ namespace CopyPaster
             item.Copy += MultiClipboardItem_Copy;
             item.Edit += MultiClipboardItem_Edit;
             MultiClipboardList.Children.Add(item);
-            clipboardItems.Add(new ClipboardItemArgs { ClipboardContent = "", Keybind = ""});
+            clipboardSettings.ClipboardItems.Add(new ClipboardItemArgs { ClipboardContent = "", Keybind = ""});
 
             Save();
         }
@@ -236,17 +252,18 @@ namespace CopyPaster
 
         private void MultiClipboardItem_Copy(object sender, ClipboardItemArgs e)
         {
-            Clipboard.SetText(e.ClipboardContent);
+            SetClipboardContent(e.ClipboardContent);
         }
 
         private void MultiClipboardItem_Edit(object sender, ClipboardItemArgs e)
         {
-            Save();
+            
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Properties.Settings.Default.Save();
+            Save();
         }
 
         private void CycleClipboardList_New(object sender, RoutedEventArgs e)

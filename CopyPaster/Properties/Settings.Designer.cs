@@ -46,5 +46,17 @@ namespace CopyPaster.Properties {
                 this["ScriptsPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseScripts {
+            get {
+                return ((bool)(this["UseScripts"]));
+            }
+            set {
+                this["UseScripts"] = value;
+            }
+        }
     }
 }
